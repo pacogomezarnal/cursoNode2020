@@ -3,7 +3,7 @@ const fs = require('fs');
 const url = require('url');
 //Template de lista de tareas
 const sustituirTarea = (tarea,tareaTemplate) =>{
-    let output = tareaTemplate.replace('{%ID%}',tarea.id);
+    let output = tareaTemplate.replace(/{%ID%}/g,tarea.id);
     output = output.replace('{%NOMBRE%}',tarea.nombre);
     output = output.replace('{%DESCRIPCION%}',tarea.descripcion);
     output = output.replace('{%FECHA%}',tarea.fecha);
@@ -19,12 +19,14 @@ console.log(dataTable);
 
 //Crear nuestro servidor
 const server = http.createServer((req, res) => {
+
+
     //Path
-    const path = req.url;
+    const {query,pathname}=url.parse(req.url);
 
    
     //Enrutado
-    if(path==='/nosotros'||path==='/'){
+    if(pathname==='/nosotros'||pathname==='/'){
         const tareaListaTemplate=dataTable.map(tarea=>sustituirTarea(tarea,tareaTemplate)).join('');
         const index=fs.readFile(`${__dirname}/templates/index.html`,'utf8',(err,data)=>{
             if(err) {
@@ -34,8 +36,8 @@ const server = http.createServer((req, res) => {
                 res.end(dataView);
             }
         });
-    }else if (path==='/productos'){
-        res.end('PRODUCTOS');
+    }else if (pathname==='/tarea'){
+        res.end('DETALLE TAREA');
     }else{
         res.writeHead(404);
         res.end('PAGINA NO ENCONTRADA');
