@@ -10,6 +10,7 @@ const sustituirTarea = (tarea,tareaTemplate) =>{
 
     return output;
 }
+//Template de tarea
 const  tareaTemplate=fs.readFileSync(`${__dirname}/templates/tarea.html`,'utf8');
 
 //DaTOS Prueba
@@ -22,7 +23,7 @@ const server = http.createServer((req, res) => {
 
 
     //Path
-    const {query,pathname}=url.parse(req.url);
+    const {query,pathname}=url.parse(req.url,true);
 
    
     //Enrutado
@@ -37,7 +38,15 @@ const server = http.createServer((req, res) => {
             }
         });
     }else if (pathname==='/tarea'){
-        res.end('DETALLE TAREA');
+        console.log(query);
+        const index=fs.readFile(`${__dirname}/templates/detalleTarea.html`,'utf8',(err,data)=>{
+            if(err) {
+                res.end('ERROR');
+            }else{
+                dataView=sustituirTarea(dataTable[query.id-1],data)
+                res.end(dataView);
+            }
+        });
     }else{
         res.writeHead(404);
         res.end('PAGINA NO ENCONTRADA');
