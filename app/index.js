@@ -1,15 +1,9 @@
-const http=require('http');
+const http = require('http');
 const fs = require('fs');
 const url = require('url');
-//Template de lista de tareas
-const sustituirTarea = (tarea,tareaTemplate) =>{
-    let output = tareaTemplate.replace(/{%ID%}/g,tarea.id);
-    output = output.replace('{%NOMBRE%}',tarea.nombre);
-    output = output.replace('{%DESCRIPCION%}',tarea.descripcion);
-    output = output.replace('{%FECHA%}',tarea.fecha);
 
-    return output;
-}
+const sustituirTarea = require('./modulos/sustituir');
+
 //Template de tarea
 const  tareaTemplate=fs.readFileSync(`${__dirname}/templates/tarea.html`,'utf8');
 
